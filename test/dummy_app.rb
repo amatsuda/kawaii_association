@@ -11,11 +11,15 @@ module KawaiiAssociationTestApp
 end
 
 # models
-class User < ActiveRecord::Base; end
+class Post < ActiveRecord::Base; end
+class Comment < ActiveRecord::Base; end
+class Category < ActiveRecord::Base; end
 
 # migrations
 class CreateAllTables < ActiveRecord::VERSION::MAJOR >= 5 ? ActiveRecord::Migration[5.0] : ActiveRecord::Migration
   def self.up
-    create_table(:users) {|t| t.string :name; t.string :email; t.integer :age }
+    create_table(:posts) {|t| t.string :title }
+    create_table(:comments) {|t| t.string :body }
+    create_table(:category) {|t| t.string :name }
   end
 end
