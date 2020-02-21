@@ -26,4 +26,11 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_dependency 'railties'
+  spec.add_dependency 'activerecord'
+  spec.add_development_dependency 'rails'
+  spec.add_development_dependency 'test-unit-rails'
+  spec.add_development_dependency 'sqlite3'
+  spec.add_development_dependency 'byebug'
 end
