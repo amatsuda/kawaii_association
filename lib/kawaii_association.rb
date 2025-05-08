@@ -15,13 +15,30 @@ module KawaiiAssociation
     end
   end
 
+  class OptionEvaluator < BasicObject
+    attr_reader :opts
+
+    def initialize
+      @opts = {}
+    end
+
+    def method_missing(name, value)
+      @opts[name] = value
+    end
+  end
+
   class Evaluator < BasicObject
     def initialize(model, type)
       @model, @type = model, type
     end
 
-    def method_missing(name, *scope, **opts, &extension)
-      @model.method(@type).super_method.call name, *scope, **opts, &extension
+    def method_missing(name, *scope, **opts, &opt_block)
+      if opt_block
+        opt_evaluator = OptionEvaluator.new
+        opt_evaluator.instance_eval(&opt_block)
+        opts.merge!(opt_evaluator.opts)
+      end
+      @model.method(@type).super_method.call name, *scope, **opts
     end
   end
 end

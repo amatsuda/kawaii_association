@@ -16,20 +16,24 @@ class KawaiiAssociationTest < ActiveSupport::TestCase
   sub_test_case 'has_one' do
     test 'it works' do
       Post.has_one do
-        category dependent: :nullify
+        category dependent: :nullify, foreign_key: 'category_uid'
       end
 
       assert_kind_of ActiveRecord::Reflection::HasOneReflection, Post.reflections['category']
+      assert_equal 'category_uid', Post.reflections['category'].foreign_key
     end
   end
 
   sub_test_case 'belongs_to' do
     test 'it works' do
       Comment.belongs_to do
-        post touch: true
+        post do
+          polymorphic true
+        end
       end
 
       assert_kind_of ActiveRecord::Reflection::BelongsToReflection, Comment.reflections['post']
+      assert Comment.reflections['post'].polymorphic?
     end
   end
 end
